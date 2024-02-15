@@ -7,6 +7,7 @@ const create= async (obj: any) =>{
   try {
     const result = await myModel.create(obj) 
     console.log("db",result);
+    return result
   } catch (error) {
     console.log(error);
   }

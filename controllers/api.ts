@@ -1,7 +1,7 @@
-import express, { Request, Response, Express }  from "express"
+import express, { Request, Response }  from "express"
 import  * as services from "../services/services"
 const router = express.Router()
-
+import { userValidations } from "../validations/validation"
 const app = express()
 app.use(express.json())
 
@@ -19,6 +19,13 @@ router.get('/', async (req:Request, res:Response) => {
 
 router.post('/create', async (req:Request, res:Response) => {
     try {
+        const{error, value} = await userValidations.validate(req.body,{abortEarly:false})
+        if (error) {
+            return res.status(400).json({ error: error.details.map((detail) => detail.message) });
+            // console.log(error.details);
+        } else {
+            console.log(" is :" , value);
+        }
         const result = await services.create(req.body)
         res.status(200).send("added successfully")
     } catch (error) {
