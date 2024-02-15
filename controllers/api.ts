@@ -37,6 +37,15 @@ router.post('/create', async (req:Request, res:Response) => {
 router.get('/check/:myId', async (req:Request, res:Response) => {
     try {
         const _id = req.params.myId
+        // const{error, value} = await userValidations.validate(req.body,{abortEarly:false})
+        const{error, value} = await userValidations.validate("_id", {abortEarly:false})
+        if (error) {
+            return res.status(400).json({ error: error.details.map((detail) => detail.message) });
+            // console.log(error.details);
+        } else {
+            console.log(" is :" , value);
+        }
+        
         const result = await services.findById({_id: _id})
         console.log("check",result);
         
@@ -49,6 +58,13 @@ router.get('/check/:myId', async (req:Request, res:Response) => {
 router.put('/update/:myId', async (req:Request, res:Response) => {
     try {
         const _id = req.params.myId
+        const{error, value} = await userValidations.validate("_id", {abortEarly:false})
+        if (error) {
+            return res.status(400).json({ error: error.details.map((detail) => detail.message) });
+            // console.log(error.details);
+        } else {
+            console.log(" is :" , value);
+        }
         const result = await services.findOneAndUpdate({_id}, {title:"mouse", price:2000000})
         console.log("check",result);
         
@@ -62,6 +78,13 @@ router.put('/update/:myId', async (req:Request, res:Response) => {
 router.delete('/del/:myId', async (req:Request, res:Response) => {
     try {
         const _id = req.params.myId
+        const{error, value} = await userValidations.validate("_id", {abortEarly:false})
+        if (error) {
+            return res.status(400).json({ error: error.details.map((detail) => detail.message) });
+            // console.log(error.details);
+        } else {
+            console.log(" is :" , value);
+        }
         const result = await services.deleteOne({_id: _id})
         console.log("check",result);
         
