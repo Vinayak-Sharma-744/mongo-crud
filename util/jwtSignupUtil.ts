@@ -9,7 +9,7 @@ const signUp = async (req: Request , res: Response, next: NextFunction) =>{
     const username = req.body.username
     const findUser = await userModel.findOne({username: username})
     if(!findUser){
-        var token = jwt.sign({username: username},jwtPass)  
+        var token = jwt.sign({username: username},jwtPass, {expiresIn:60})  
         res.status(200).json({token})
     }else{
         res.status(411).json({ErrMsg: `Invalid token`,mes: "user already exists go to login"})
