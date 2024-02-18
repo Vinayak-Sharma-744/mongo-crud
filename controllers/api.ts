@@ -6,8 +6,12 @@ import * as jwt from "jsonwebtoken"
 import signUp from "../util/jwtSignupUtil"
 import login from "../util/jwtLoginUtil"
 import userModel from "../model/model1"
+import myPassport from "../config/passport/passport"
+import passport from "passport"
+import { ExtractJwt, Strategy as JwtStrategy, StrategyOptions } from 'passport-jwt';
 const app = express()
 app.use(express.json())
+const jwtPass = "123123";
 
 router.get('/', async (req:Request, res:Response) => {
     try {
@@ -102,12 +106,17 @@ router.delete('/del/:myId', async (req:Request, res:Response) => {
     }
 })
 
-router.post("/signup", signUp , async (req:Request , res:Response)=>{
+
+router.post("/signup", async (req:Request , res:Response)=>{
     try {
-        const isUserPresent = userModel.findOne(req.body)
+        const isUserPresent = await userModel.findOne(req.body)
+        const username = req.body.username;
+        const findUser = await userModel.findOne({ username: username });
         if (!isUserPresent) {
             const result = await userModel.create(req.body)
-            res.status(200).send("added successfully")
+            console.log("new user is : ",result);
+            var token = jwt.sign({ username: username }, jwtPass);
+            res.status(200).json(token)
         } else {
             res.status(411).json({msg: "user already in memory"})
         }   
@@ -116,7 +125,10 @@ router.post("/signup", signUp , async (req:Request , res:Response)=>{
     }
 })
 
-router.get("/login", login, async (req:Request , res:Response)=>{
+
+app.use(passport.initialize())
+
+router.get("/login",myPassport.authenticate('jwt', {session:false}),login, async (req:Request , res:Response)=>{
     try {
         const result = await userModel.find()
         const productResult = await services.find()
