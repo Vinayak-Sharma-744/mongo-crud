@@ -3,11 +3,9 @@ import  * as services from "../services/services"
 const router = express.Router()
 import { userValidations } from "../validations/validation"
 import * as jwt from "jsonwebtoken"
-import signUp from "../util/jwtSignupUtil"
 import login from "../util/jwtLoginUtil"
 import userModel from "../model/model1"
-import myPassport from "../config/passport/passport"
-import passport from "passport"
+
 import { ExtractJwt, Strategy as JwtStrategy, StrategyOptions } from 'passport-jwt';
 const app = express()
 app.use(express.json())
@@ -125,10 +123,7 @@ router.post("/signup", async (req:Request , res:Response)=>{
     }
 })
 
-
-app.use(passport.initialize())
-
-router.get("/login",myPassport.authenticate('jwt', {session:false}),login, async (req:Request , res:Response)=>{
+router.get("/login",login, async (req:Request , res:Response)=>{
     try {
         const result = await userModel.find()
         const productResult = await services.find()

@@ -1,10 +1,4 @@
-// const mongoose = require("mongoose");
 import mongoose from "mongoose"
-// import dotenv from "dotenv";
-// import {dbUrl} from "../constants"
-// Connect to MongoDB
-// mongoose.connect('mongodb+srv://vinayak-0077:QcmJyn2sdkjc1ZBF@cluster0.u3ezcfk.mongodb.net/')
-// dotenv.config();
 const db = async()=>{
     
     try {
